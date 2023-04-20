@@ -4,7 +4,7 @@ A demo showing the pose of the GY-85 9DoF IMU sensor in 3D using esp-idf.
 GY-85 consists of the following three chips.   
 - ADXL345 Accelermter   
 - ITG3205 Gyroscope   
-- HMC5883L Electronic Compass   
+- QMC5883L Electronic Compass   
 
 You can use the Kalman filter to estimate the Euler angle.   
 Euler angles are roll, pitch and yaw.   
