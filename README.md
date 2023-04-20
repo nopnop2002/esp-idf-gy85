@@ -15,7 +15,7 @@ First, calibrate the compass and find the offset value for each axis.
 As you can see, the X, Y and Z axes are quite off-center.   
 ![gy85-calib-1](https://user-images.githubusercontent.com/6020549/233240180-22a5bbc6-f25b-4d07-9910-1655c9a3964a.jpg)
 
-Then use the accelerometer and magnetometer to find the Euler angle.   
+Then use the sensor values to find the Euler angles.   
 ![gy85-euler](https://user-images.githubusercontent.com/6020549/233240284-2d3d56aa-b1a7-46df-b336-f1d295435601.JPG)
 
 I used [this](https://github.com/jrowberg/i2cdevlib/tree/master/Arduino/gy85) library.   
