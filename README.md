@@ -69,7 +69,7 @@ or
 http://esp32.local/
 ```
 
-As you move the IMU it plots the X, Y and Z values.   
+As you rotate the IMU it plots the X, Y and Z values.   
 X, Y, Z offset are displayed.   
 
 ![gy85-calib-1](https://user-images.githubusercontent.com/6020549/233240180-22a5bbc6-f25b-4d07-9910-1655c9a3964a.jpg)
