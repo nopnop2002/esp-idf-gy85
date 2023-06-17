@@ -23,7 +23,7 @@ I used [this](https://github.com/jrowberg/i2cdevlib/tree/master/Arduino) library
 
 # Software requiment
 ESP-IDF V4.4/V5.0.   
-ESP-IDF V5 is required when using ESP32-C2.   
+ESP-IDF V5.0 is required when using ESP32-C2.   
 
 # Hardware requirements
 GY-85 9DoF IMU Sensors.   
