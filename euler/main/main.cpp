@@ -20,23 +20,16 @@ QueueHandle_t xQueueTrans;
 
 extern "C" {
 	void app_main(void);
+	void start_wifi(void);
+	void start_mdns(void);
+	void start_i2c(void);
+	int ws_server_start(void);
+	void udp_trans(void *pvParameters);
+	void server_task(void *pvParameters);
+	void client_task(void *pvParameters);
 }
 
 void gy85(void *pvParameters);
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-void start_wifi(void);
-void start_mdns(void);
-void start_i2c(void);
-int ws_server_start(void);
-void udp_trans(void *pvParameters);
-void server_task(void *pvParameters);
-void client_task(void *pvParameters);
-#ifdef __cplusplus
-}
-#endif
 
 void start_mdns(void)
 {
@@ -60,6 +53,7 @@ void start_i2c(void) {
 	conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
 	conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
 	conf.master.clk_speed = 400000;
+	conf.clk_flags = 0;
 	ESP_ERROR_CHECK(i2c_param_config(I2C_NUM_0, &conf));
 	ESP_ERROR_CHECK(i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0));
 }
