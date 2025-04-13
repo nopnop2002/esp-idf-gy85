@@ -9,8 +9,11 @@ GY-85 consists of the following three chips.
 You can use the Kalman filter to estimate the Euler angle.   
 Euler angles are roll, pitch and yaw.   
 It's very intuitive and easy to understand.   
-![a-Pitch-yaw-and-roll-angles-of-an-aircraft-with-body-orientation-O-u-v-original](https://user-images.githubusercontent.com/6020549/226072914-a7f923fc-eb6e-4d19-b2ff-8c9f2749ee6f.jpg)
+![a-Pitch-yaw-and-roll-angles-of-an-aircraft-with-body-orientation-O-u-v-original](https://user-images.githubusercontent.com/6020549/226072914-a7f923fc-eb6e-4d19-b2ff-8c9f2749ee6f.jpg)   
+You can view like this.   
+![Image](https://github.com/user-attachments/assets/6d81eec0-5b80-4e5f-ae97-689742253f9a)   
 
+# Installation overview   
 First, calibrate the compass and find the offset value for each axis.   
 As you can see, the X, Y and Z axes are quite off-center.   
 ![gy85-calib-1](https://user-images.githubusercontent.com/6020549/233240180-22a5bbc6-f25b-4d07-9910-1655c9a3964a.jpg)
