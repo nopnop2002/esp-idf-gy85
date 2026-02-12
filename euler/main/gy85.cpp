@@ -91,12 +91,6 @@ float gyro_sensitivity;
 int gx_offset, gy_offset, gz_offset;
 
 bool getMagData(int16_t *mx, int16_t *my, int16_t *mz) {
-	if (!mag.testConnection()) {
-		ESP_LOGE(TAG, "*****HMC5883L connection lost*****");
-		vTaskDelay(100);
-		return false;
-	}
-
 	// Wait until DataReady
 	ESP_LOGD(TAG, "mag.getReadyStatus()=0x%x", mag.getReadyStatus());
 	for (int retry=0;retry<10;retry++) {
@@ -213,7 +207,7 @@ void updateYaw(double magX, double magY, double magZ, double kalAngleX, double k
 
 void gy85(void *pvParameters){
 	// Initialize ADXL345
-	accel.initialize();
+	accel.initialize(400000);
 
 	// Verify the I2C connection
 	if (!accel.testConnection()) {
@@ -226,7 +220,7 @@ void gy85(void *pvParameters){
 	accel_sensitivity = 3.9 * 1000.0; // g
 
 	// Initialize ITG3200
-	gyro.initialize();
+	gyro.initialize(400000);
 
 	// Verify the I2C connection
 	if (!gyro.testConnection()) {
@@ -243,7 +237,7 @@ void gy85(void *pvParameters){
 	// Normal measurement configuration.
 	// -1.3Ga-->+1.3Ga 1090 counts / Gauss
 	// Single-Measurement Mode.
-	mag.initialize();
+	mag.initialize(400000);
 
 	// Verify the I2C connection
 	if (!mag.testConnection()) {

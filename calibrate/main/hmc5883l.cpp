@@ -21,12 +21,6 @@ static const char *TAG = "MAG";
 #define RAD_TO_DEG (180.0/M_PI)
 #define DEG_TO_RAD 0.0174533
 
-#if 0
-// Arduino macro
-#define micros() (unsigned long) (esp_timer_get_time())
-#define delay(ms) esp_rom_delay_us(ms*1000)
-#endif
-
 HMC5883L mag(HMC5883L_DEFAULT_ADDRESS);
 
 void hmc5883l(void *pvParameters){
@@ -36,7 +30,7 @@ void hmc5883l(void *pvParameters){
 	// Normal measurement configuration.
 	// -1.3Ga-->+1.3Ga 1090 counts / Gauss
 	// Single-Measurement Mode.
-	mag.initialize();
+	mag.initialize(400000);
 
 	// Verify the I2C connection
 	if (!mag.testConnection()) {
