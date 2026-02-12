@@ -11,7 +11,7 @@ Euler angles are roll, pitch and yaw.
 It's very intuitive and easy to understand.   
 ![a-Pitch-yaw-and-roll-angles-of-an-aircraft-with-body-orientation-O-u-v-original](https://user-images.githubusercontent.com/6020549/226072914-a7f923fc-eb6e-4d19-b2ff-8c9f2749ee6f.jpg)   
 You can view like this.   
-![Image](https://github.com/user-attachments/assets/6d81eec0-5b80-4e5f-ae97-689742253f9a)   
+![Image](https://github.com/user-attachments/assets/cb9f1408-b372-4e55-84f6-1191f068cd1a)
 
 # Installation overview   
 First, calibrate the compass and find the offset value for each axis.   
@@ -182,6 +182,7 @@ Python 3.11.2
 $ sudo apt install python3-pip python3-setuptools
 $ python3 -m pip install -U pip
 $ python3 -m pip install panda3d
+$ python3 -m pip install numpy
 $ git clone https://github.com/nopnop2002/esp-idf-mpu6050-dmp
 $ cd esp-idf-mpu6050-dmp/panda3d
 $ python3 panda.py --help
@@ -191,7 +192,7 @@ options:
   -h, --help            show this help message and exit
   --model {jet,biplain,707,fa18}
 ```
-![Image](https://github.com/user-attachments/assets/6d81eec0-5b80-4e5f-ae97-689742253f9a)   
+![Image](https://github.com/user-attachments/assets/83804b5e-3ffe-4e18-966e-0ce180c1ab21)
 
 ### Installation for Windows
 Install Git for Windows from [here](https://gitforwindows.org/).   
@@ -202,6 +203,7 @@ $ python --version
 Python 3.11.9
 $ python -m pip install -U pip
 $ python -m pip install panda3d
+$ python -m pip install numpy
 $ git clone https://github.com/nopnop2002/esp-idf-mpu6050-dmp
 $ cd esp-idf-mpu6050-dmp/panda3d
 $ python panda.py --help
@@ -211,7 +213,7 @@ options:
   -h, --help            show this help message and exit
   --model {jet,biplain,707,fa18}
 ```
-![Image](https://github.com/user-attachments/assets/0ec982c4-3353-4cb8-9c39-ecd785ca9729)
+![Image](https://github.com/user-attachments/assets/7f2fbdf4-97d9-40c3-87db-9f8386741220)
 
 ### How to use   
 See [here](https://github.com/nopnop2002/esp-idf-mpu6050-dmp/blob/main/panda3d/README.md)   
