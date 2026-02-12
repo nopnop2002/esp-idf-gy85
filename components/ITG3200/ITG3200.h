@@ -111,12 +111,10 @@ THE SOFTWARE.
 
 class ITG3200 {
     public:
-#if 0
         ITG3200();
-#endif
-        ITG3200(uint8_t address);
+        ITG3200(uint16_t address);
         
-        void initialize();
+        void initialize(uint32_t clkSpeed);
         bool testConnection();
         
         // WHO_AM_I register
@@ -174,7 +172,8 @@ class ITG3200 {
         void setClockSource(uint8_t source);
 
     private:
-        uint8_t devAddr;
+        uint16_t devAddr; // I2C device address
+        i2c_master_dev_handle_t devHandle; // I2C device handle
         uint8_t buffer[6];
 };
 

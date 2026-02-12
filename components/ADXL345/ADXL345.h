@@ -165,12 +165,10 @@ THE SOFTWARE.
 
 class ADXL345 {
     public:
-#if 0
         ADXL345();
-#endif
-        ADXL345(uint8_t address);
+        ADXL345(uint16_t address);
 
-        void initialize();
+        void initialize(uint32_t clkSpeed);
         bool testConnection();
 
         // DEVID register
@@ -356,7 +354,8 @@ class ADXL345 {
         uint8_t getFIFOLength();
 
     private:
-        uint8_t devAddr;
+        uint8_t devAddr; // I2C device address
+        i2c_master_dev_handle_t devHandle; // I2C device handle
         uint8_t buffer[6];
 };
 
