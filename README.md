@@ -3,8 +3,11 @@ A demo showing the pose of the GY-85 9DoF IMU sensor in 3D using esp-idf.
 
 GY-85 consists of the following three chips.   
 - ADXL345 Accelermter   
+	GY-85 uses Analog Devices's ADXL345 Accelermter.    
 - ITG3205 Gyroscope   
-- QMC5883L Electronic Compass   
+	GY-85 uses InvenSense's ITG3200 Gyroscope.   
+- HMC5883L Magnetometer   
+	GY-85 uses Honeywell's HMC5883L digital magnetometer. 
 
 You can use the Kalman filter to estimate the Euler angle.   
 Euler angles are roll, pitch and yaw.   
