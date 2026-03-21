@@ -78,16 +78,26 @@ static const char *TAG = "IMU";
 #define micros() (unsigned long) (esp_timer_get_time())
 #define delay(ms) esp_rom_delay_us(ms*1000)
 
+// Create the Accelermter instances
 ADXL345 accel(ADXL345_DEFAULT_ADDRESS);
+
+// Create the Gyroscope instances
 ITG3200 gyro(ITG3200_DEFAULT_ADDRESS);
+
+// Create the Magnetometer instances
 HMC5883L mag(HMC5883L_DEFAULT_ADDRESS);
-Kalman kalmanX; // Create the Kalman instances
+
+// Create the Kalman instances
+Kalman kalmanX;
 Kalman kalmanY;
 Kalman kalmanZ;
 
 // Accel & Gyro scale factor
 float accel_sensitivity;
 float gyro_sensitivity;
+
+// Accel & Gyro zero offset
+int ax_offset, ay_offset, az_offset;
 int gx_offset, gy_offset, gz_offset;
 
 bool getMagData(int16_t *mx, int16_t *my, int16_t *mz) {
@@ -124,13 +134,42 @@ void _getMagData(double *magX, double *magY, double *magZ) {
 		ESP_LOGD(TAG, "mag=%f %f %f", *magX, *magY, *magZ);
 	}
 }
+
+void accelZeroCalibrate(int samples, int sampleDelayMS, int *x_offset, int *y_offset, int *z_offset)
+{
+	int32_t x_offset_temp = 0;
+	int32_t y_offset_temp = 0;
+	int32_t z_offset_temp = 0;
+	int16_t x,y,z;
+	for (int i = 0;i < samples;i++){
+		delay(sampleDelayMS);
+		accel.getAcceleration(&x, &y, &z);
+		// printf("%d %d %d\n", x, y, z);
+		x_offset_temp += x;
+		y_offset_temp += y;
+		z_offset_temp += z - 256;
+		// printf("offset_temp=%ld %ld %ld\n", x_offset_temp, y_offset_temp, z_offset_temp);
+	}
+
+	// printf("last offset_temp=%ld %ld %ld\n", x_offset_temp, y_offset_temp, z_offset_temp);
+	*x_offset = x_offset_temp/samples;
+	*y_offset = y_offset_temp/samples;
+	*z_offset = z_offset_temp/samples;
+	// printf("offset=%d %d %d\n", *x_offset, *y_offset, *z_offset);
+}
+
 void _getAcceleration(double *_ax, double *_ay, double *_az) {
 	// Read raw data from accel. Units don't care.
 	int16_t ax, ay, az;
 	accel.getAcceleration(&ax, &ay, &az);
+#if 0
 	*_ax = ax / accel_sensitivity;
 	*_ay = ay / accel_sensitivity;
 	*_az = az / accel_sensitivity;
+#endif
+	*_ax = (ax - ax_offset) / accel_sensitivity;
+	*_ay = (ay - ay_offset) / accel_sensitivity;
+	*_az = (az - az_offset) / accel_sensitivity;
 	//printf("acc=%f %f %f\n", *_ax, *_ay, *_az);
 }
 
@@ -151,13 +190,9 @@ void gyroZeroCalibrate(int samples, int sampleDelayMS, int *x_offset, int *y_off
 	}
 
 	// printf("last offset_temp=%ld %ld %ld\n", x_offset_temp, y_offset_temp, z_offset_temp);
-	x_offset_temp = x_offset_temp/samples;
-	y_offset_temp = y_offset_temp/samples;
-	z_offset_temp = z_offset_temp/samples;
-	// printf("avr offset_temp=%ld %ld %ld\n", x_offset_temp, y_offset_temp, z_offset_temp);
-	*x_offset = x_offset_temp;
-	*y_offset = y_offset_temp;
-	*z_offset = z_offset_temp;
+	*x_offset = x_offset_temp/samples;
+	*y_offset = y_offset_temp/samples;
+	*z_offset = z_offset_temp/samples;
 	// printf("offset=%d %d %d\n", *x_offset, *y_offset, *z_offset);
 }
 
@@ -217,7 +252,15 @@ void gy85(void *pvParameters){
 
 	// Set Accelerometer Full Scale Range to ±2mg
 	accel.setRange(0x00);
-	accel_sensitivity = 3.9 * 1000.0; // g
+
+	// Get the Accelerometer offset
+	ESP_LOGW(TAG, "Accel is currently being calibrated. Please do not move it.");
+	accelZeroCalibrate(200, 10, &ax_offset, &ay_offset, &az_offset);
+	ESP_LOGI(TAG, "a_offset=%d %d %d", ax_offset, ay_offset, az_offset);
+	vTaskDelay(500);
+	ESP_LOGW(TAG, "Accel calibration is complete.");
+	//accel_sensitivity = 3.9 * 1000.0; // g
+	accel_sensitivity = 256.0; // g
 
 	// Initialize ITG3200
 	gyro.initialize(400000);
@@ -227,8 +270,13 @@ void gy85(void *pvParameters){
 		ESP_LOGE(TAG, "ITG3200 not found");
 		vTaskDelete(NULL);
 	}
+
+	// Get the Gyroscope offset
+	ESP_LOGW(TAG, "Gyro is currently being calibrated. Please do not move it.");
 	gyroZeroCalibrate(200, 10, &gx_offset, &gy_offset, &gz_offset);
 	ESP_LOGI(TAG, "g_offset=%d %d %d", gx_offset, gy_offset, gz_offset);
+	vTaskDelay(500);
+	ESP_LOGW(TAG, "Gyro calibration is complete.");
 	gyro_sensitivity = 14.375; // Deg/Sec
 
 	// Initialize HMC5883L
@@ -297,7 +345,7 @@ void gy85(void *pvParameters){
 	while(1){
 		_getAcceleration(&ax, &ay, &az);
 		_getRotation(&gx, &gy, &gz);
-		// printf("%f %f %f - %f %f %f\n", ax, ay, az, gx, gy, gz);
+		//printf("%f %f %f - %f %f %f\n", ax, ay, az, gx, gy, gz);
 		getRollPitch(ax, ay, az, &roll, &pitch);	
 		_getMagData(&mx, &my, &mz);
 
